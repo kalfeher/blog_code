@@ -72,7 +72,7 @@ spec:
         app: opensearch
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: managed-nfs-storage
+      storageClassName: my-storage
       resources:
         requests:
-          storage: 2Gi
+          storage: 20Gi #If you're only storing parsedmarc reports, this can be much lower
