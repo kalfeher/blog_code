@@ -1,0 +1,3 @@
+### Needed for compatibility with OSS versions of elasticsearch
+elasticsearch==7.13.4
+parsedmarc

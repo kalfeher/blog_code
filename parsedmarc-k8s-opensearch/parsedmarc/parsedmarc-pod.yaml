@@ -1,0 +1,36 @@
+#parsedmarc-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: parsedmarc
+  labels:
+    app: parsedmarc
+spec:
+  containers:
+    - name: parsedmarc
+      image: docker.io/MYDOCKERHUB/parsedmarc:latest
+      env:
+        - name: IMAP_USER
+          valueFrom:
+            secretKeyRef:
+              name: dmarc-secret
+              key: username
+        - name: IMAP_PASS
+          valueFrom:
+            secretKeyRef:
+              name: dmarc-secret
+              key: password
+      command: ["/bin/sh", "-c"]
+      args: ['cp /parsedmarc.ini /opt/dmarc/parsedmarc.ini; echo "user = ${IMAP_USER}" >> /opt/dmarc/parsedmarc.ini; echo "password = ${IMAP_PASS}" >> /opt/dmarc/parsedmarc.ini; parsedmarc -c /opt/dmarc/parsedmarc.ini']
+      volumeMounts:
+        - mountPath: /opt/dmarc
+          name: parsedmarc-conf
+        - mountPath: /usr/share/GeoIP
+          name: geoip-data
+  volumes:
+    - name: parsedmarc-conf
+      persistentVolumeClaim:
+       claimName: parsedmarc-conf
+    - name: geoip-data
+      persistentVolumeClaim:
+        claimName: geoip-data

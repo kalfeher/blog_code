@@ -1,0 +1,24 @@
+#geoip-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: geoipupdate
+  labels:
+    app: geoipupdate
+spec:
+  containers:
+    - name: geoipupdate
+      image: maxmindinc/geoipupdate:latest
+      env:
+        - name: GEOIPUPDATE_ACCOUNT_ID
+          value: 'MyAccountID' # This is a number
+        - name: GEOIPUPDATE_LICENSE_KEY
+          value: myLicenseKey # This is a string
+        - name: GEOIPUPDATE_EDITION_IDS
+          value: GeoLite2-ASN GeoLite2-City GeoLite2-Country
+        - name: GEOIPUPDATE_FREQUENCY
+          value: '72'
+
+      volumeMounts:
+        - mountPath: /usr/share/GeoIP
+          name: geoip-data
