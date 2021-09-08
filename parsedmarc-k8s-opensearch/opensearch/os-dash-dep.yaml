@@ -1,0 +1,26 @@
+# os-dash-dep.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: os-dashbd
+  name: os-dashbd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: os-dashbd
+  template:
+    metadata:
+      labels:
+        app: os-dashbd
+    spec:
+      containers:
+        - env:
+            - name: OPENSEARCH_HOSTS
+              value: https://opensearch:9200
+          image: opensearchproject/opensearch-dashboards:latest
+          name: os-dashbd
+          ports:
+            - containerPort: 5601
+      restartPolicy: Always
