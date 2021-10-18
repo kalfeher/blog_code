@@ -11,7 +11,7 @@
       awx_operator_local_dir: "/home/{{k8s_user}}/awx-operator/"
       awx_deploy_file: "/home/{{k8s_user}}/awx/awx_deploy-{{awx_release}}.yml"
     tasks:
-      - name: Get built site repo
+      - name: "Step 1. Clone AWX release locally"
         ansible.builtin.git:
           repo: "{{awx_repo}}"
           dest: "{{awx_operator_local_dir}}"
@@ -19,12 +19,12 @@
           force: yes
 
 
-      - name: Check if this version has a deployment file
+      - name: "Step 2. Check if this release version has a deployment file"
         stat:
           path: "{{awx_deploy_file}}"
         register: deploy_file
 
-      - name: Make deployment
+      - name: "Step 3. run make in repo"
         make:
           chdir: "{{awx_operator_local_dir}}"
           target: deploy
@@ -32,13 +32,13 @@
             NAMESPACE: awx-feher
         when: not deploy_file.stat.exists
 
-      - name: Set release version
+      - name: "Step 4. Set image release version for controller"
         shell:
           chdir: "{{awx_operator_local_dir}}/config/manager/"
           cmd: "{{awx_operator_local_dir | quote }}/bin/kustomize edit set image controller=quay.io/ansible/awx-operator:{{ awx_release | quote }}"
         when: not deploy_file.stat.exists
 
-      - name: Make default config
+      - name: "Step 5. Generate the deployment file"
         shell:
           chdir: "{{awx_operator_local_dir}}/"
           cmd: bin/kustomize build config/default >> {{awx_deploy_file | quote}}
