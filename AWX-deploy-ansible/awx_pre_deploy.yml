@@ -1,6 +1,6 @@
 ---
   - name: Prepare for AWX deployment
-    hosts: my_k8s_master
+    hosts: my_k8s_manager # the host from where you will run kubectl to apply the deploy file.
     # become: yes # If Ansible is executed as a different user to user that will execute the deploy file
     # become_user: myuser
     vars:
