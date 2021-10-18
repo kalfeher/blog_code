@@ -7,7 +7,6 @@
       k8s_user: "myuser"
       awx_release: "0.14.0"
       awx_repo: "https://github.com/ansible/awx-operator.git"
-      first_run: false
       awx_operator_local_dir: "/home/{{k8s_user}}/awx-operator/"
       awx_deploy_file: "/home/{{k8s_user}}/awx/awx_deploy-{{awx_release}}.yml"
     tasks:
