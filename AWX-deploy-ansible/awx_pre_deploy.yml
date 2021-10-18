@@ -1,0 +1,46 @@
+---
+  - name: Prepare for AWX deployment
+    hosts: my_k8s_master
+    # become: yes # If Ansible is executed as a different user to user that will execute the deploy file
+    # become_user: myuser
+    vars:
+      k8s_user: "myuser"
+      awx_release: "0.14.0"
+      awx_repo: "https://github.com/ansible/awx-operator.git"
+      first_run: false
+      awx_operator_local_dir: "/home/{{k8s_user}}/awx-operator/"
+      awx_deploy_file: "/home/{{k8s_user}}/awx/awx_deploy-{{awx_release}}.yml"
+    tasks:
+      - name: Get built site repo
+        ansible.builtin.git:
+          repo: "{{awx_repo}}"
+          dest: "{{awx_operator_local_dir}}"
+          version: "{{awx_release}}"
+          force: yes
+
+
+      - name: Check if this version has a deployment file
+        stat:
+          path: "{{awx_deploy_file}}"
+        register: deploy_file
+
+      - name: Make deployment
+        make:
+          chdir: "{{awx_operator_local_dir}}"
+          target: deploy
+          params:
+            NAMESPACE: awx-feher
+        when: not deploy_file.stat.exists
+
+      - name: Set release version
+        shell:
+          chdir: "{{awx_operator_local_dir}}/config/manager/"
+          cmd: "{{awx_operator_local_dir | quote }}/bin/kustomize edit set image controller=quay.io/ansible/awx-operator:{{ awx_release | quote }}"
+        when: not deploy_file.stat.exists
+
+      - name: Make default config
+        shell:
+          chdir: "{{awx_operator_local_dir}}/"
+          cmd: bin/kustomize build config/default >> {{awx_deploy_file | quote}}
+          creates: "{{awx_deploy_file}}"
+        when: not deploy_file.stat.exists
