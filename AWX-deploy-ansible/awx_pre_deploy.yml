@@ -29,7 +29,7 @@
           chdir: "{{awx_operator_local_dir}}"
           target: deploy
           params:
-            NAMESPACE: awx-feher
+            NAMESPACE: awx-example
         when: not deploy_file.stat.exists
 
       - name: "Step 4. Set image release version for controller"
