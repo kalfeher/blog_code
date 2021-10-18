@@ -1,5 +1,5 @@
 ---
-  - name: Prepare for AWX deployment
+  - name: Create AWX Operator deployment manifest
     hosts: my_k8s_manager # the host from where you will run kubectl to apply the deploy file.
     # become: yes # If Ansible is executed as a different user to user that will execute the deploy file
     # become_user: myuser
