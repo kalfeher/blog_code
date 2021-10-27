@@ -4,7 +4,7 @@ metadata:
   name: name-virtual-host-ingress-matomo
   namespace: matomo
   annotations:
-    cert-manager.io/clusterissuer: my-cluster-issuer
+    cert-manager.io/clusterissuer: my-lab-root-issuer
 spec:
   ingressClassName: nginx # this is now a required field
   tls:
