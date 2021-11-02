@@ -1,0 +1,17 @@
+---
+  - name: Fetch Matomo import log tool
+    hosts: myhost
+    become: no
+    vars:
+      myuser: "myuser"
+      matomo_release: "4.x-dev"
+      matomo_repo: "https://github.com/matomo-org/matomo-log-analytics.git"
+      matomo_local: "/home/{{myuser}}/matomo-import/"
+    tasks:
+
+      - name: "Clone Matomo release locally."
+        ansible.builtin.git:
+          repo: "{{matomo_repo}}"
+          dest: "{{matomo_local}}"
+          version: "{{matomo_release}}"
+          force: yes
