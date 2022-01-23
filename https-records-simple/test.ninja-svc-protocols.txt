@@ -1,0 +1,42 @@
+$TTL 1W
+
+@       IN      SOA     a.nic.test.ninja. dnsadmin.test.ninja.  (
+                                      1000       ; Serial
+                                      28800      ; Refresh
+                                      14400      ; Retry
+                                      604800     ; Expire - 1 week
+                                      86400 )    ; Minimum
+; An apex HTTPS record for when people type in 'test.ninja' (no www)
+        IN      HTTPS       2 rand0.test.ninja. alpn="h2" ; Randomly selected by clients that don't support http3 and QUIC
+        IN      HTTPS       2 rand1.test.ninja. alpn="h2" ; Randomly selected by clients that don't support http3 and QUIC
+        IN      HTTPS       1 quic-web.test.ninja. no-default-alpn alpn="h3" ; Preferred by clients that support http3 and QUIC
+; For when people type in 'www.test.ninja'
+www     IN      HTTPS       2 rand0.test.ninja. alpn="h2" ; Randomly selected by clients that don't support http3 and QUIC
+www     IN      HTTPS       2 rand1.test.ninja. alpn="h2" ; Randomly selected by clients that don't support http3 and QUIC
+www     IN      HTTPS       1 quic-web.test.ninja. no-default-alpn alpn="h3" ; Preferred by clients that support http3 and QUIC
+; A and AAAA records for my web servers
+rand0   IN      A         198.51.100.110
+rand0   IN      AAAA      2001:DB8::110
+rand1   IN      A         198.51.100.111
+rand1   IN      AAAA      2001:DB8::111
+quic-web    IN  A         198.51.100.200
+quic-web    IN  AAAA      2001:DB8::200
+
+; My MX records. Note that mail server not fully qualified
+@       IN      MX      0 mail
+; Host address for mail
+mail    IN      A       198.51.100.4
+; My name servers.
+@               IN      NS      a.nic
+@               IN      NS      b.nic
+@               IN      NS      c.nic
+@               IN      NS      d.nic
+; Glue records for my name servers
+a.nic           IN      A       198.51.100.1
+b.nic           IN      A       198.51.100.2
+c.nic           IN      A       198.51.100.3
+d.nic           IN      AAAA    2001:DB8::1
+
+; Notes:
+; - All IP addresses used here are from RFC3849 and RFC5737
+; - All domains are example domains only.
