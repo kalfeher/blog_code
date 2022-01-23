@@ -5,7 +5,7 @@
     # become_user: myuser
     vars:
       k8s_user: "myuser"
-      awx_release: "0.14.0"
+      awx_release: "0.15.0"
       awx_repo: "https://github.com/ansible/awx-operator.git"
       awx_operator_local_dir: "/home/{{k8s_user}}/awx-operator/"
       awx_deploy_file: "/home/{{k8s_user}}/awx/awx_deploy-{{awx_release}}.yml"
