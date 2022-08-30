@@ -1,0 +1,21 @@
+{
+  "CN": "Example {{CA_LABEL}} Certificate Authority",
+  "key": {
+    "algo": "{{ca_algo.algo}}",
+    "size": {{ca_algo.size}}
+  },
+  "names": [
+    {
+      "C": "AU",
+      "L": "Melbourne",
+      "O": "Example Internal"
+    }
+{% if CA_LABEL == 'root' %}
+  ],
+  "ca": {
+    "expiry": "87600h"
+  }
+{% else %}
+  ]
+{% endif %}
+}

@@ -1,0 +1,86 @@
+---
+  - name: Install CFSSL
+    hosts: "{{ target| default('cfssl') }}"
+    gather_facts: yes
+    become: yes
+    vars:
+      ubuntu_pkgs:
+        - build-essential
+        - golang
+        - golang-cfssl
+      pki_dir: "/etc/certificates"
+      sub_pki_dirs:
+        - "root"
+        - "issuer"
+        - "certificates"
+        - "conf"
+        - "bin"
+        - "log"
+      CA_LABELS:
+        - "root"
+        - "issuer"
+      ca_algo:
+        algo: "ecdsa"
+        size: "256"
+      user: "signer"
+      group: "signers"
+    tasks:
+      - name: Install packages on Ubuntu # More OSes added if I can find the time
+        apt:
+          name: "{{ item }}"
+          state: present
+        when: ansible_facts['distribution'] == "Ubuntu"
+        loop: "{{ ubuntu_pkgs }}"
+      - name: Add PKI directory
+        file:
+          path: "{{pki_dir}}"
+          state: directory
+          mode: '0750'
+          owner: "{{signer}}"
+          group: "{{signers}}"
+      - name: Add sub dirs to PKI
+        file:
+          path: "{{pki_dir}}/{{item}}"
+          state: directory
+          mode: '0750'
+          owner: "{{signer}}"
+          group: "{{signers}}"
+        loop: "{{ sub_pki_dirs }}"
+      - name: Copy root-csr
+        ansible.builtin.template:
+          src: "../group_files/{{ target| default('cfssl')}}/csr.json.j2"
+          dest: "{{pki_dir}}/{{CA_LABEL}}/{{CA_LABEL}}-csr.json"
+          owner: "{{signers}}"
+          mode: '0640'
+          group: "{{signers}}"
+        loop: "{{ CA_LABELS }}"
+        loop_control:
+          loop_var: CA_LABEL
+      - name: Copy Readme.md
+        ansible.builtin.copy:
+          src: "../group_files/{{ target| default('cfssl')}}/Readme.md"
+          dest: "{{pki_dir}}/Readme.md"
+          owner: "{{signer}}"
+          mode: '0640'
+          group: "{{signers}}"
+      - name: Copy config file
+        ansible.builtin.copy:
+          src: "../group_files/{{ target| default('cfssl')}}/config.json"
+          dest: "{{pki_dir}}/conf/config.json"
+          owner: "{{signer}}"
+          mode: '0640'
+          group: "{{signers}}"
+      - name: Copy a sample host CSR json file
+        ansible.builtin.copy:
+          src: "../group_files/{{ target| default('cfssl')}}/sample-host.json"
+          dest: "{{pki_dir}}/certificates/sample-host.json"
+          owner: "{{signer}}"
+          mode: '0640'
+          group: "{{signers}}"
+      - name: Copy sign-host.sh script
+        ansible.builtin.copy:
+          src: "../group_files/{{ target| default('cfssl')}}/sign-host.sh"
+          dest: "{{pki_dir}}/bin/sign-host.sh"
+          owner: "{{signer}}"
+          group: "{{signers}}"
+          mode: '0770'

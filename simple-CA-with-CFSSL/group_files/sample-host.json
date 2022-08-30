@@ -1,0 +1,12 @@
+{
+  "CN": "sample.lab.example",
+  "hosts": ["sample.lab.example", "10.0.0.101"],
+  "names": [
+    {
+      "C": "AU",
+      "L": "Melbourne",
+      "O": "Example Internal",
+      "OU": "Example Internal Hosts"
+    }
+  ]
+}
