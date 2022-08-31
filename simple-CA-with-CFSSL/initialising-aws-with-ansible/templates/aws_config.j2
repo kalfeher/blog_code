@@ -1,0 +1,5 @@
+# templates/aws_config.j2
+# Note the name of the certificate and private key. Check the value of {{ansible_hostname}} if these files are not found.
+[default]
+region=ap-southeast-2
+credential_process = {{localbin}}/aws_signing_helper credential-process --certificate {{aws_dir}}/{{ansible_hostname}}.pem --private-key {{aws_dir}}/{{ansible_hostname}}-key.pem --trust-anchor-arn {{ta_arn}} --profile-arn {{profile_arn}} --role-arn {{role_arn}}

@@ -1,0 +1,48 @@
+---
+  - name: Deploy IAM roles anywhere compatible config file.
+    hosts: "{{ target| default('localhost')}}"
+    gather_facts: yes
+    become: yes
+    vars:
+      signing_helper_url: "https://s3.amazonaws.com/roles-anywhere-credential-helper/CredentialHelper/latest/linux_amd64/aws_signing_helper"
+      signing_helper_checksum: "308424e4ecd002ae3eb155c443b941e08ed66032868567f519eccf8d2c8c5387" # Always check that this is correct
+      user: "aws_runner" # this is the aws running user
+      group: "aws_runner"
+      home_dir: "/home"
+      localbin: "{{home_dir}}/{{user}}/.local/bin"
+      aws_dir: "{{home_dir}}/{{user}}/.aws"
+      # ta_arn: Found in vault
+      # profile_arn: Found in vault
+      # role_arn: Found in vault
+    vars_files: "{{ vault_file| default ('vault/default_host_role.yaml') }}"
+    tasks:
+      - name: Create local bin directory if not present
+        file:
+          path: "{{localbin}}"
+          mode: '0770'
+          owner: "{{user}}"
+          group: "{{group}}"
+          state: directory
+      - name: Create .aws directory if not present
+        file:
+          path: "{{aws_dir}}"
+          mode: '0770'
+          owner: "{{user}}"
+          group: "{{group}}"
+          state: directory
+      - name: Ensure credential helper is present
+        ansible.builtin.get_url:
+          checksum: "sha256:{{signing_helper_checksum}}"
+          url: "{{signing_helper_url}}"
+          dest: "{{home_dir}}/{{user}}/.local/bin/aws_signing_helper"
+          mode: '0550'
+          owner: "{{user}}"
+          group: "{{group}}"
+      - name: Copy config file
+        ansible.builtin.template:
+          src: aws_config.j2
+          dest: "{{aws_dir}}/config"
+          backup: true
+          owner: "{{user}}"
+          group: "{{group}}"
+          mode: '0640'

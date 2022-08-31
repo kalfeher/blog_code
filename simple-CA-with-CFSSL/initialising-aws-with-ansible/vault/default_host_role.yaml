@@ -1,0 +1,6 @@
+---
+# This file should be encrypted using:
+# ansible-vault encrypt vault/default_host_role --vault-password-file ~/.ansible/vault
+  ta_arn: "111122223333444"
+  profile_arn: "555666777888"
+  role_arn: "999000111222"
