@@ -36,23 +36,23 @@
           path: "{{pki_dir}}"
           state: directory
           mode: '0750'
-          owner: "{{signer}}"
-          group: "{{signers}}"
+          owner: "{{user}}"
+          group: "{{group}}"
       - name: Add sub dirs to PKI
         file:
           path: "{{pki_dir}}/{{item}}"
           state: directory
           mode: '0750'
-          owner: "{{signer}}"
-          group: "{{signers}}"
+          owner: "{{user}}"
+          group: "{{group}}"
         loop: "{{ sub_pki_dirs }}"
       - name: Copy root-csr
         ansible.builtin.template:
           src: "../group_files/{{ target| default('cfssl')}}/csr.json.j2"
           dest: "{{pki_dir}}/{{CA_LABEL}}/{{CA_LABEL}}-csr.json"
-          owner: "{{signers}}"
           mode: '0640'
-          group: "{{signers}}"
+          owner: "{{user}}"
+          group: "{{group}}"
         loop: "{{ CA_LABELS }}"
         loop_control:
           loop_var: CA_LABEL
@@ -60,27 +60,27 @@
         ansible.builtin.copy:
           src: "../group_files/{{ target| default('cfssl')}}/Readme.md"
           dest: "{{pki_dir}}/Readme.md"
-          owner: "{{signer}}"
+          owner: "{{user}}"
           mode: '0640'
-          group: "{{signers}}"
+          group: "{{group}}"
       - name: Copy config file
         ansible.builtin.copy:
           src: "../group_files/{{ target| default('cfssl')}}/config.json"
           dest: "{{pki_dir}}/conf/config.json"
-          owner: "{{signer}}"
+          owner: "{{user}}"
           mode: '0640'
-          group: "{{signers}}"
+          group: "{{group}}"
       - name: Copy a sample host CSR json file
         ansible.builtin.copy:
           src: "../group_files/{{ target| default('cfssl')}}/sample-host.json"
           dest: "{{pki_dir}}/certificates/sample-host.json"
-          owner: "{{signer}}"
+          owner: "{{user}}"
           mode: '0640'
-          group: "{{signers}}"
+          group: "{{group}}"
       - name: Copy sign-host.sh script
         ansible.builtin.copy:
           src: "../group_files/{{ target| default('cfssl')}}/sign-host.sh"
           dest: "{{pki_dir}}/bin/sign-host.sh"
-          owner: "{{signer}}"
-          group: "{{signers}}"
+          owner: "{{user}}"
+          group: "{{group}}"
           mode: '0770'

@@ -6,3 +6,5 @@ To install:
 # you can override the default host group using -e "target=blah"
 ansible-playbook cfssl/install.yaml -e "target=my_group"
 ```
+## Using the CFSSL
+Refer to the  `Readme.md` file which is copied over to the destination host for usage examples. 
