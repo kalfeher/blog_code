@@ -40,8 +40,6 @@ spec:
                 fieldPath: metadata.name
           - name: discovery.zen.ping.unicast.hosts
             value: "os-cluster-0.opensearch,os-cluster-1.opensearch,os-cluster-2.opensearch"
-          - name: discovery.zen.minimum_master_nodes
-            value: "2"
           - name: cluster.initial_master_nodes
             value: "os-cluster-0,os-cluster-1"
           - name: ES_JAVA_OPTS
