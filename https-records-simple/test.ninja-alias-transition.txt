@@ -1,5 +1,5 @@
 $TTL 1W
-
+$ORIGIN test.ninja.
 @       IN      SOA     a.nic.test.ninja. dnsadmin.test.ninja.  (
                                       1000       ; Serial
                                       28800      ; Refresh
@@ -7,9 +7,9 @@ $TTL 1W
                                       604800     ; Expire - 1 week
                                       86400 )    ; Minimum
 ; An apex A record for when people type in 'test.ninja' (no www)
-        IN      A       192.0.2.1 ; For clients that do not support HTTPS records
-        IN      A       192.0.2.2 ; For clients that do not support HTTPS records
-        IN      HTTPS   0   mycdn.example.com. ; For clients that support HTTPS records
+@        IN      A       192.0.2.1 ; For clients that do not support HTTPS records
+@        IN      A       192.0.2.2 ; For clients that do not support HTTPS records
+@        IN      HTTPS   0   mycdn.example.com. ; For clients that support HTTPS records
 ; For when people type in 'www.test.ninja'
 www     IN      CNAME      mycdn.example.com. ; For clients that do not support HTTPS records
 www     IN      HTTPS   0   mycdn.example.com. ; For clients that support HTTPS records

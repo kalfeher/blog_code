@@ -1,5 +1,5 @@
 $TTL 1W
-
+$ORIGIN test.ninja.
 @       IN      SOA     a.nic.test.ninja. dnsadmin.test.ninja.  (
                                       1000       ; Serial
                                       28800      ; Refresh
@@ -7,14 +7,14 @@ $TTL 1W
                                       604800     ; Expire - 1 week
                                       86400 )    ; Minimum
 ; An apex HTTPS record for when people type in 'test.ninja' (no www)
-        IN      HTTPS       1 . alpn="h2" ; The target will be an apex A or AAAA record.
+@        IN      HTTPS       1 . alpn="h2" ; The target will be an apex A or AAAA record.
                                           ; HTTP/1.1 is also supported because there is no `no-default-alpn` present.
 
 ; For when people type in 'www.test.ninja'
 www     IN      HTTPS     1 test.ninja. alpn="h2"
 ; A and AAAA records for my web servers
-        IN      A         198.51.100.100
-        IN      AAAA      2001:DB8::100
+@        IN      A         198.51.100.100
+@        IN      AAAA      2001:DB8::100
 
 
 ; My MX records. Note that mail server not fully qualified
