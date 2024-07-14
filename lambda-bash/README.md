@@ -1,6 +1,7 @@
-Example `Containerfile` and `function.sh` script for an AWS lambda function using `Bash`.
+Example `Containerfile` and `function.sh` script for an AWS lambda function using `Bash`. Read below for details on customising this for your needs.
 
-## 1. Get the image
+## Containerfile
+### 1. Get the image
 I'm pulling the image from AWS's public registry. Change this if you have a local repo.
 
 For this example, I'm using the AWS bootstrap code with no changes.
@@ -15,7 +16,7 @@ COPY bootstrap bootstrap
 RUN chmod 755 bootstrap
 ```
 
-## 2. Copy your code
+### 2. Copy your code
 The example file uses only a single `function.sh` file. Add any additional scripts in this section.
 ```
 # 2.
@@ -24,7 +25,7 @@ WORKDIR /var/task/
 COPY function.sh function.sh
 RUN chmod 755 function.sh
 ```
-## 3. Add the tools you need.
+### 3. Add the tools you need.
 The baseline amazonlinux container comes without some very common tools. `jq` is a notable absence and any function dealing with files will probably need `gzip` or `unzip` at the very least. Add any tools which can be installed via dnf in this section.
 ```
 # 3.
@@ -32,7 +33,7 @@ The baseline amazonlinux container comes without some very common tools. `jq` is
 RUN dnf --nodocs install -y gzip unzip jq
 ```
 
-## 4. Add the AWS cli.
+### 4. Add the AWS cli.
 If you don't need the `aws-cli` then remove this section, it will save you a _lot_ of room (AWS ECR charges you for image storage, so smaller is better). The example file has the url for the x86_64 architecture executable. Change this url if you plan on deploying the container on a graviton based instance. There are currently no space optimising install options. If they do become available, add them to the install command line.
 ```
 # 4.
@@ -46,7 +47,7 @@ RUN ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli
 RUN rm -rf /tmp/aws && rm -f /tmp/awscliv2.zip
 ```
 
-## 5. The handler
+### 5. The handler
 You can change the handler name if you wish. Bear in mind that you'll need to ensure that your file is copied to the correct name in [step 2](#2-copy-your-code). Most people will not need to make any changes here.
 ```
 # 5.
