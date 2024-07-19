@@ -15,7 +15,7 @@ function handler () {
     if [ $FOUND == 0 ]; then
       RESPONSE="I searched ${LINES} lines and the file does not contain the string. That bad-bad"
     else
-      RESPONSE="I searched ${LINES} lines and the file contains the string ${FOUND} times. That good-good"
+      RESPONSE="I searched ${LINES} lines and the file contains the string "${FOUND}" times. That good-good"
     fi
 
   else if [ $TYPE == "ASCII" ]; then
@@ -24,7 +24,7 @@ function handler () {
     if [ $FOUND == 0 ]; then
       RESPONSE="I searched ${LINES} lines and the file does not contain the string. That bad-bad"
     else
-      RESPONSE="I searched ${LINES} lines and the file contains the string ${FOUND} times. That good-good"
+      RESPONSE="I searched ${LINES} lines and the file contains the string "${FOUND}" times. That good-good"
     fi
   else
     RESPONSE="ERROR: Unknown file type"
