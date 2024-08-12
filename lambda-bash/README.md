@@ -1,6 +1,11 @@
 Example `Containerfile` and `function.sh` script for an AWS lambda function using `Bash`. Read below for details on customising this for your needs.
 
 ## Containerfile
+
+To keep things simple, I'm downloading and unpacking the `aws-cli` package within the container. This could be done separately with only the install files copied into the container. This would allow you to avoid installing `unzip` if it isn't required for any other purpose. The space savings from not installing `unzip` are minimal and it would add another script as a dependency to this one. 
+
+However if you need to security scan the package prior to install, then separately downloading and extracting the files should be done outside of the steps within the `Containerfile`. 
+
 ### 1. Get the image
 I'm pulling the image from AWS's public registry. Change this if you have a local repo.
 
