@@ -1,5 +1,8 @@
 Example `Containerfile` and `function.sh` script for an AWS lambda function using `Bash`. Read below for details on customising this for your needs.
 
+## bootstrap
+I've included AWS' `bootstrap` file in this repository without changes. If you do customise this file or write your own, then you may need to make additional changes to the function definition.
+
 ## Containerfile
 
 To keep things simple, I'm downloading and unpacking the `aws-cli` package within the container. This could be done separately with only the install files copied into the container. This would allow you to avoid installing `unzip` if it isn't required for any other purpose. The space savings from not installing `unzip` are minimal and it would add another script as a dependency to this one. 
@@ -9,13 +12,13 @@ However if you need to security scan the package prior to install, then separate
 ### 1. Get the image
 I'm pulling the image from AWS's public registry. Change this if you have a local repo.
 
-For this example, I'm using the AWS bootstrap code with no changes.
+For this example, I'm using the AWS bootstrap file from their documentation, with no changes.
 ```
 # 1.
 # First we get the base image
 FROM public.ecr.aws/lambda/provided:latest
 
-# Copy bootstrap
+# Using a local copy of the AWS documented example bootstrap file
 WORKDIR /var/runtime/
 COPY bootstrap bootstrap
 RUN chmod 755 bootstrap
@@ -86,5 +89,5 @@ Then we upload. This may take a few minutes depending on upload bandwidth and if
 podman push \
 ${MYACCOUNT}.dkr.ecr.${MYREGION}.amazonaws.com/${FUNCNAME}:latest
 ```
-## Run the lambda
-The example function should be triggered by an S3 put event. The source bucket doesnt matter. Make sure the lambda function has permissions to fetch the object.
+## Run the Lambda
+The example function should be triggered by an S3 put event. Consider adding additional checks to validate the source bucket in the `handler` function. Make sure the Lambda function has permissions to fetch the object.
