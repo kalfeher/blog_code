@@ -1,5 +1,11 @@
 A simple script to find certificates in AWS CloudTrail that have been used with IAM Roles Anywhere, in the last day. Search is by _serial_, which you should receive in any AWS warnings about expiring certificates.
 
+## AWS Settings
+Ensure that the values for **AWS CLI Settings** are correct for your configuration.
+- **AWS_PROFILE** *(Default)*: `default`
+- **AWS_REGION** *(Default)*:`ap-southeast-2`
+
+
 ## Prerequisites
 The script requires both `aws-cli` and `jq` to be present. You may need to update the default paths in the script if it can't find either of these.
 
