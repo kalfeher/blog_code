@@ -1,5 +1,5 @@
 #!/bin/bash
-# Template bash script
+
 
 ## Globals
 MYNAME=$(basename -s .sh ${0})
