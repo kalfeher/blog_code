@@ -93,6 +93,6 @@ check_args $@
 check_deps
 ## Fetch unique CNs for serial
 echo "Searching for Certificates with serial:${serial} in CloudTrail from ${start} until now"
-${AWS_PATH} cloudtrail lookup-events --start-time ${start} --lookup-attributes AttributeKey=EventSource,AttributeValue=rolesanywhere.amazonaws.com | ${JQ_PATH} '.Events[].CloudTrailEvent' | grep ${serial} | egrep -o 'CN=([a-z0-9.])*'|uniq
+${AWS_PATH} cloudtrail lookup-events --start-time ${start} --lookup-attributes AttributeKey=EventSource,AttributeValue=rolesanywhere.amazonaws.com | ${JQ_PATH} '.Events[].CloudTrailEvent' | grep ${serial} | egrep -o 'CN=([a-z0-9.-])*'|uniq
 
 # vim: set ts=2 expandtab sw=2 smarttab :
