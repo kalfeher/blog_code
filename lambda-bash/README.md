@@ -1,9 +1,15 @@
 Example `Containerfile` and `function.sh` script for an AWS lambda function using `Bash`. Read below for details on customising this for your needs.
+## Easy Mode
+If you _just_ want a container that has the `aws-cli`, `jq`, `gzip`  and `unzip` installed, then: 
+1. download this repo 
+2. replace `function.sh` with your code. You can use the existing code to give you ideas about handling Lambda triggering events.
+3. Skip to [Build the container](#build-the-container).
 
 ## bootstrap
 I've included AWS' `bootstrap` file in this repository without changes. If you do customise this file or write your own, then you may need to make additional changes to the function definition.
 
 ## Containerfile
+Read this section if you wish to customise your container. It will walk you through the `Containerfile` in this repo and give you hints regarding how you can modify it to suit your needs.
 
 To keep things simple, I'm downloading and unpacking the `aws-cli` package within the container. This could be done separately with only the install files copied into the container. This would allow you to avoid installing `unzip` if it isn't required for any other purpose. The space savings from not installing `unzip` are minimal and it would add another script as a dependency to this one. 
 
@@ -66,7 +72,7 @@ ENTRYPOINT ["/lambda-entrypoint.sh"]
 CMD [ "function.handler" ]
 ```
 ## Build the container
-All examples use `podman`, but you can can use `docker` with all steps if you have that installed. Note the `arch` option. If you're building for Graviton instances, use `arch=arm64`.
+All examples use `podman`, but you can can use `docker` with all steps if you have that installed. Note the `arch` option. If you're building for Graviton instances, use `arch=arm64`. `FUNCNAME` is the name you will use for your function container in ECR.
 ```Bash
 FUNCNAME=funcwmyhart
 podman build --arch=amd64 -t ${FUNCNAME} -f /pathto/Containerfile
