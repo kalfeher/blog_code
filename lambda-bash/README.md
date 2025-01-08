@@ -53,8 +53,13 @@ If you don't need the `aws-cli` then remove this section, it will save you a _lo
 # 4.
 # Download and install AWS CLI
 WORKDIR /tmp
+
+# Use this URL for graviton and other arm instances
+# https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip
+
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip && \
 unzip -u awscliv2.zip
+
 # install
 RUN ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli
 # clean up
