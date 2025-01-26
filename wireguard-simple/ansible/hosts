@@ -1,0 +1,12 @@
+vpshosts:
+  hosts:
+    gateway01:
+      ansible_host:  2001:0DB8::100 # change to your VPS IP address
+      ansible_user: ubuntu # Your hoster should provide you with this user name
+      ansible_become_pass: "{{ vpn_host_sudo }}"
+ubuntu:
+  hosts:
+    gateway01:
+vpn:
+  hosts:
+    gateway01:

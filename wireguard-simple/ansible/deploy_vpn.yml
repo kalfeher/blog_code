@@ -1,0 +1,90 @@
+- name: Set up wireguard
+  hosts: vpn
+  gather_facts: true
+  become: true
+  vars:
+    wireguard_dir: "/etc/wireguard"
+  vars_files: vault/vpn_vault.yml
+  tasks:
+    # install wireguard
+    - name: Install packages
+      ansible.builtin.apt:
+        name: "{{ vpn_packages }}"
+        state: present
+      when:
+        - ansible_distribution == "Ubuntu"
+    # Copy wireguard config. Will include private key
+    - name: Copy wg0 config to server
+      ansible.builtin.template:
+        src: wg0.conf.j2
+        dest: "{{ wireguard_dir }}/wg0.conf"
+        force: true # may be disruptive to established connections.
+        mode: "0770"
+      notify: "reload wireguard"
+    # ensure firewall allows traffic through.
+    - name: Allow wireguard through firewall
+      community.general.ufw:
+        rule: allow
+        port: "{{ vpn_network.listenport }}"
+        proto: udp
+      notify: "ufw reload"
+    - name: Allow ipv4 clients through firewall
+      community.general.ufw:
+        rule: allow
+        from_ip: "{{ vpn_network.ipv4_subnet }}"
+        direction: in
+        interface: wg0
+      notify: "ufw reload"
+    - name: Allow ipv6 clients through firewall
+      community.general.ufw:
+        rule: allow
+        from_ip: "{{ vpn_network.ipv6_subnet }}"
+        direction: in
+        interface: wg0
+      notify: "ufw reload"
+    # need a service per config.
+    - name: Enable wireguard config
+      ansible.builtin.systemd:
+        name: wg-quick@wg0.service
+        enabled: true
+        state: started
+    # proxy set up.
+    - name: Enable and start squid
+      ansible.builtin.systemd:
+        name: squid
+        enabled: true
+        state: started
+    - name: Squid access config
+      ansible.builtin.template:
+        src: squid-access.conf.j2
+        dest: "/etc/squid/conf.d/squid-access.conf"
+        mode: "0644"
+        backup: true
+      notify: "reload squid"
+    - name: Squid params config
+      ansible.builtin.template:
+        src: squid-params.conf.j2
+        dest: "/etc/squid/conf.d/squid-params.conf"
+        mode: "0644"
+        backup: true
+      notify: "reload squid"
+    # delete this task if you no longer need to see the pub key
+    - name: Public key for server
+      ansible.builtin.debug:
+        msg: "Server public key \n{{ vpn_server_public }}"
+
+  handlers:
+    - name: Reload ufw
+      community.general.ufw:
+        state: reloaded
+      listen: "ufw reload"
+    - name: Reload wireguard
+      ansible.builtin.systemd:
+        name: wg-quick@wg0.service
+        state: reloaded
+      listen: "reload wireguard"
+    - name: Reload squid
+      ansible.builtin.systemd:
+        name: squid
+        state: reloaded
+      listen: "reload squid"

@@ -1,0 +1,3 @@
+vpn_host_sudo: "theStupidestPassEva!"
+vpn_server_private: "Thisisyourprivkey" 
+vpn_server_public: "Thisisyourpubkey" 

@@ -1,0 +1,4 @@
+# Define acl first
+acl {{ vpn_network.name }} src {{ vpn_network.ipv4_subnet }}
+acl {{ vpn_network.name }} src {{ vpn_network.ipv6_subnet }}
+http_access allow {{ vpn_network.name }}

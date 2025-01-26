@@ -1,0 +1,13 @@
+[Interface]
+PrivateKey = {{ vpn_server_private }}
+Address = {{ vpn_network.ipv4 }}, {{ vpn_network.ipv6 }}
+ListenPort = {{ vpn_network.listenport }}
+SaveConfig = {{ vpn_network.saveconfig }}
+
+{% if vpn_peers is defined %}
+{% for peer in vpn_peers %}
+[Peer]
+PublicKey = {{ peer.pubkey }}
+AllowedIPs = {{ peer.allowedips }}
+{% endfor %}
+{% endif %}

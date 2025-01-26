@@ -1,0 +1,14 @@
+- name: Install wireguard
+  hosts: vpn
+  gather_facts: false
+  become: true
+  vars_files: vault/vpn_vault.yml # sudo password is here
+  tasks:
+    # install wireguard
+    - name: Install packages
+      ansible.builtin.apt:
+        name: "{{ vpn_packages }}"
+        state: present
+      when:
+        - ansible_distribution == "Ubuntu"
+    # Additional OS/Distribution tasks can be added here

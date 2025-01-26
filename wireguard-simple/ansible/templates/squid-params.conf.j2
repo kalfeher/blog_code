@@ -1,0 +1,4 @@
+http_port {{ vpn_proxy_port }}
+visible_hostname {{ vpn_proxy_hostname }}
+# We'll remove all x_forwarded_for headers
+forwarded_for delete
