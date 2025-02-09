@@ -1,0 +1,32 @@
+# First we get the base image
+FROM public.ecr.aws/lambda/provided:latest
+
+# Copy our bootstrap and make it executable
+WORKDIR /var/runtime/
+COPY bootstrap bootstrap
+RUN chmod 755 bootstrap
+
+# Copy our function code and make it executable
+WORKDIR /var/task/
+COPY function.sh function.sh
+RUN chmod 755 function.sh
+
+WORKDIR /tmp
+# Install any tools you need via dnf
+RUN dnf --nodocs install -y jq unzip openssl
+
+# Install aws-cli
+# Change URL for Intel instances
+WORKDIR /tmp
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o awscliv2.zip && \
+unzip -u awscliv2.zip
+#
+
+RUN ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli
+
+RUN rm -rf /tmp/aws && rm -f /tmp/awscliv2.zip
+# Set the handler
+# by convention <fileName>.<handlerName>
+WORKDIR /var/task
+ENTRYPOINT ["/lambda-entrypoint.sh"]
+CMD [ "function.handler" ]
