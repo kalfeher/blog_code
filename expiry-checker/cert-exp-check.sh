@@ -33,7 +33,6 @@ function checkexpiry ()
   UXEXPIRY=$(date -j -f "%b %d %H:%M:%S %Y %Z" "$EXPIRY" +%s)
   # Linux date conversion 
   #UXEXPIRY=$(date -d "$EXPIRY" +%s)
-
   WILLEXP=$(openssl s_client -servername ${WEBSITE} -connect ${WEBSITE}:443 </dev/null 2> /dev/null| openssl x509 -checkend ${EXP} -noout)
 
   if [[ $WILLEXP == *"will expire"* ]]; then
