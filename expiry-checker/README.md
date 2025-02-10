@@ -9,6 +9,11 @@ This script is intended as a primer for someone who will build their own solutio
 ## Lambda
 For detailed instructions on building the container refer to the file `lambda/container/cert-expiry-checker.md`.
 
+### Requirements
+1. AWS account. You can probably adapt this to another cloud provider with container execution options, with only minor effort. 
+2. SNS topic and subscribers to receive renewal warning notices.
+3. You'll need an account/role that can create and manage Lambda functions and ECR private repos
+
 ### Container Architecture
 Ensure that you read the build instructions and follow the advice regarding the processor architecture of your Lambda function. Since Graviton is cheaper and for this script network latency is a larger factor than chip performance in terms of total execution time, `arm64` is the default.
 
