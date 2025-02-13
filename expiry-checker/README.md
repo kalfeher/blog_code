@@ -1,7 +1,7 @@
 Scripts and resources from the blog post [Checking Certificates For Expiry](https://kalfeher.com/expiry-checker).
 
-## Script: cert-exp-check.sh
-This script is intended as a primer for someone who will build their own solution. It currently outputs the results of the certificate validation step in a parsing friendly format.
+## Self_hosted
+The `cert-exp-check.sh` script is intended as a primer for someone who will build their own solution. It currently outputs the results of the certificate validation step in a parsing friendly format.
 ### Requirements
 1. You will need to schedule and log the results of the script somewhere. 
 2. Ensure that the host on which the script executes has reachability to all monitored hosts.
@@ -10,7 +10,7 @@ This script is intended as a primer for someone who will build their own solutio
 For detailed instructions on building the container refer to the file `lambda/container/cert-expiry-checker.md`.
 
 ### Requirements
-1. AWS account. You can probably adapt this to another cloud provider with container execution options, with only minor effort. 
+1. AWS account. It probably wouldn't be that hard to adapt this to another cloud provider with container execution options. 
 2. SNS topic and subscribers to receive renewal warning notices.
 3. You'll need an account/role that can create and manage Lambda functions and ECR private repos
 

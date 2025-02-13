@@ -1,0 +1,8 @@
+[Unit]
+Description="Certificate Expiry Checker"
+
+[Service]
+ExecStart=/path/to/cert-exp-check.sh domain.example 30
+# Since openssl -checkend will return 1 if the cert is expiring we
+# can trigger another action via:
+#OnFailure= call mail or other service to report failure

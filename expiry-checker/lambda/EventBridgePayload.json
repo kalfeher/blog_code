@@ -1,0 +1,9 @@
+{ 
+  "sites": 
+  [ 
+    "mysite01.example", 
+    "mysite02.example" 
+  ], 
+  "days": 30, 
+  "snstopic": "arn:aws:sns:nn-moonbase-1:1234567890:certificateWarningsMyOrg" 
+}

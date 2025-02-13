@@ -1,0 +1,9 @@
+[Unit]
+Description="Run cert-exp-check.service after boot up and at 3am every day"
+
+[Timer]
+OnBootSec=10min
+OnCalendar=Mon..Sun *-*-* 3:00:00
+Unit=cert-exp-check.service
+[Install]
+WantedBy=multi-user.target

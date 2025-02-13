@@ -1,0 +1,3 @@
+SHELL=/bin/BASH
+MAILTO=certificates@mydomain.example
+00 3 * * * /path/to/cert-exp-check.sh &> /path/to/log
