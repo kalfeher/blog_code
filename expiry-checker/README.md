@@ -32,8 +32,8 @@ Alias mode records should only have a single endpoint.
 
 The following is a truncated example showing the steps to resolve the HTTPS endpoint for an Alias mode record and the adjusted `openssl` command:
 ```Bash
-DOMAIN="httpsdomain.example"
-ENDPOINT=$(dig https ${DOMAIN} +short | cut -d" " -f2)
-# use $ENDPOINT for the -connect param, but keep $WEBSITE as the -servername param.
+WEBSITE="httpsdomain.example"
+ENDPOINT=$(dig https ${WEBSITE} +short | cut -d" " -f2)
+# use $ENDPOINT for the -connect param, but keep $DOMAIN as the -servername param.
 WILLEXP=$(openssl s_client -servername ${WEBSITE} -connect ${ENDPOINT}:443 </dev/null 2> /dev/null| openssl x509 -checkend ${EXP} -noout)
 ```
