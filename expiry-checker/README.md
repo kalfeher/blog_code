@@ -1,4 +1,4 @@
-Scripts and resources from the blog post [Checking Certificates For Expiry](https://kalfeher.com/expiry-checker).
+Scripts and resources from the blog post [Build Your Own Certificate Expiry Notifications](https://kalfeher.com/expiry-checker).
 
 ## Self_hosted
 The `cert-exp-check.sh` script is intended as a primer for someone who will build their own solution. It currently outputs the results of the certificate validation step in a parsing friendly format.
