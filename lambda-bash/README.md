@@ -82,6 +82,11 @@ All examples use `podman`, but you can can use `docker` with all steps if you ha
 FUNCNAME=funcwmyhart
 podman build --arch=amd64 -t ${FUNCNAME} -f /pathto/Containerfile
 ```
+## Create the ECR Private Repository
+If you haven't created the ECR repo, create it now. If you already have a repo you want to use, make sure that you include that repo's region and account details in the steps below. You _must_ use a private repository for containers deployed to Lambda.
+```bash
+aws ecr create-repository --repository-name ${FUNCNAME}
+```
 ## Upload to AWS
 Replace the command below with your region and your account. The command below will use your `~/.aws/config` or `~/.aws/credentials` files for authentication. DO NOT PUT ANY CREDENTIALS INTO A SCRIPT! The most convenient method of authentication will be _IAMRolesAnywhere_ when not building within AWS or using an instance role when building within AWS. 
 ```bash
