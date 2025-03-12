@@ -142,7 +142,7 @@ URI=${MYACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${FUNCNAME}:latest
 Create Lambda function using the new role and uploaded container.
 ```bash
 aws lambda create-function \
-  --role ${ROLEARN}
+  --role ${ROLEARN} \
   --function-name ${FUNCNAME} \
   --package-type Image \
   --code ${URI}
