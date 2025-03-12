@@ -105,5 +105,49 @@ Then we upload. This may take a few minutes depending on upload bandwidth and if
 podman push \
 ${MYACCOUNT}.dkr.ecr.${MYREGION}.amazonaws.com/${FUNCNAME}:latest
 ```
+## Create role for Lambda
+Example trust (`lambda-Trust.json`) and permissions policy (`example-lambda-Policy.json`) documents are included in this repo. There is also an example jinja template of the permissions policy document.
+
+Create the permissions policy. Save **ARN** value from the output.
+```bash
+aws iam create-policy \
+  --policy-name ${FUNCNAME}-lambda-Policy \
+  --policy-document file://path_to/${FUNCNAME}-lambda-Policy.json
+POLICYARN="arn:aws:iam::01234567890:policy/funcwmyhart-lambda-Policy"
+```
+Create the role. Save **ARN** value from the output
+```bash
+aws iam create-role \
+  --role-name ${FUNCNAME}-lambda-Role \
+  --assume-role-policy-document file://path_to/lambda-Trust.json
+ROLEARN="arn:aws:iam::01234567890:role/funcwmyhart-lambda-Role"
+```
+Attach policy to role.
+```bash
+aws iam attach-role-policy \
+  --policy-arn ${POLICYARN} \
+  --role-name ${FUNCNAME}-lambda-Role
+```
+## Create Lambda Function
+Get the URI of the container image uploaded earlier.
+```bash
+# Method 1. Fetch repo URI via aws cli then append 'latest' tag
+REPO=$(aws ecr describe-repositories \
+  --repository-name ${FUNCNAME} \
+  --query 'repositories[0].repositoryUri')
+URI="${REPO}:latest"
+# Method 2. Compose URI based on what we already know
+URI=${MYACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${FUNCNAME}:latest
+```
+Create Lambda function using the new role and uploaded container.
+```bash
+aws lambda create-function \
+  --role ${ROLEARN}
+  --function-name ${FUNCNAME} \
+  --package-type Image \
+  --code ${URI}
+```
+Note that no trigger is defined for the function as yet.
+
 ## Run the Lambda
 The example function should be triggered by an S3 put event. Consider adding additional checks to validate the source bucket in the `handler` function. Make sure the Lambda function has permissions to fetch the object.
