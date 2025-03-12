@@ -1,3 +1,5 @@
+Code and instructions from the post [Running Bash Scripts on AWS Lambda](https://kalfeher.com/bash-lambda/)
+
 Example `Containerfile` and `function.sh` script for an AWS lambda function using `Bash`. Read below for details on customising this for your needs.
 ## Easy Mode
 If you _just_ want a container that has the `aws-cli`, `jq`, `gzip`  and `unzip` installed, then: 
