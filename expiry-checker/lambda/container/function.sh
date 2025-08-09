@@ -1,8 +1,8 @@
 function handler () {
   EVENT_DATA=$1
-  SITES=$(echo $EVENT_DATA | sed 's/\\//g' | jq ".sites[]"| tr -d '"')
-  DAYS=$(echo $EVENT_DATA | sed 's/\\//g' | jq ".days"| tr -d '"')
-  SNSTOPIC=$(echo $EVENT_DATA | sed 's/\\//g' | jq ".snstopic"| tr -d '"')
+  SITES=$(echo $EVENT_DATA | sed 's/\\//g' | jq -r ".sites[]")
+  DAYS=$(echo $EVENT_DATA | sed 's/\\//g' | jq -r ".days")
+  SNSTOPIC=$(echo $EVENT_DATA | sed 's/\\//g' | jq -r ".snstopic")
   EXP=$(( 86400 * $DAYS ))
   NOW=$(date +%s)
   DEADLINE=$(( $NOW + $EXP ))

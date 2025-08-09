@@ -4,7 +4,7 @@ function handler () {
   LINES=0
   FOUND=0
   cd /tmp
-  NEWFILE=$(echo $EVENT_DATA | sed 's/\\//g' | jq ".Records[0].s3.object.key"| tr -d '"')
+  NEWFILE=$(echo $EVENT_DATA | sed 's/\\//g' | jq -r ".Records[0].s3.object.key")
   aws s3 cp s3://$NEWFILE .
   FILENAME="$(basename $NEWFILE)"
   # Do something with the file
