@@ -1,0 +1,16 @@
+plugin: community.proxmox.proxmox
+user: ansible@pve
+token_id: ansible-01
+url: https://10.10.0.3:8006
+validate_certs: false
+###### Replace this with the actual token secret for the ansible-01 token
+token_secret: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      6231336539666234306139346
+######
+want_facts: true
+exclude_nodes: true
+keyed_groups:
+  - key: 'proxmox_tags_parsed'
+    separator: "_"
+    prefix: 'px'

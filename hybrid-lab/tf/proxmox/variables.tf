@@ -5,6 +5,18 @@ variable "proxmox_user" {
   sensitive = true
   ephemeral = true
 }
+variable "proxmox_ssh_user" {
+  type        = string
+  description = "SSH user for the Proxmox host"
+  sensitive   = true
+  ephemeral   = true
+}
+variable "proxmox_ssh_key" {
+  type        = string
+  description = "Path to SSH key for the Proxmox host"
+  sensitive   = true
+  ephemeral   = true
+}
 variable "guest_vm_user" {
   type = string
   description = "Username for the guest VM"
@@ -38,3 +50,4 @@ variable "proxmox_node_name" {
   type = string
   description = "Name of the Proxmox node"
 }
+
