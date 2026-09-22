@@ -1,3 +1,5 @@
+This code originally appeared in the post [Connecting Semaphore or Ansible to Proxmox](https://kalfeher.com/hybrid-lab-03)
+
 ## 1. Create the Ansible/Semaphore user
 
 Create user `ansible`. The `@pve` represents the [PVE authentication realm](https://pve.proxmox.com/wiki/User_Management#pveum_authentication_realms)
